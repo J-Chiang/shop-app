@@ -49,7 +49,7 @@ export function Form(props) {
     const { children, ...other } = props;
     return (
         <form {...other} className={classes.root} autoComplete="off">
-            {props.children}
+            {children}
         </form>
     )
 }
