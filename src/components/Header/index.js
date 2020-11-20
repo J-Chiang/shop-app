@@ -3,21 +3,13 @@ import './style.css';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signout } from '../../actions';
+import { makeStyles, Menu, MenuItem } from '@material-ui/core';
+import { Person, Settings, ShoppingCart } from '@material-ui/icons';
 
 const Header = (props) => {  
 
@@ -30,25 +22,60 @@ const Header = (props) => {
   
   const renderLoggedInLinks = () => {
     return (
-      <ul>
-        <li><NavLink to={'/'}>Home</NavLink></li>
-        <li><NavLink to={'/products'}>Products</NavLink></li>
-        <li><NavLink to={'/orders'}>Orders</NavLink></li>
-        <li><NavLink to={'/category'}>Category</NavLink></li>
-        <li><Button onClick={logout}>Signout</Button></li>
-      </ul>
-     
+      <div>
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={handleMenu}
+          color="inherit"
+        >
+          <Settings />
+        </IconButton>
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>Product</MenuItem>
+          <MenuItem onClick={handleClose}>Categories</MenuItem>
+        </Menu>
+      </div>
     )
   }
+  const classes = makeStyles(theme => ({
+    grow: {
+      flexGrow: 1,
+    },
+    sectionDesktop: {
+      display: 'none',
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+      },
+    },
+  }))
 
-  const renderNonLoggedInLinks = () => {
-    return (
-      <ul>
-        <li><NavLink to="signin">Signin</NavLink></li>
-        <li><NavLink to="signup">Signup</NavLink></li>
-      </ul>
-    );
-  }
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div className="header">
@@ -59,10 +86,25 @@ const Header = (props) => {
               Ecommerce
             </Typography>
           </Link>
-          {/* <Button color="inherit">Login</Button> */}
           {
-            auth.authenticate ? renderLoggedInLinks() : renderNonLoggedInLinks()
+            auth.authenticate && renderLoggedInLinks()
           }
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <Person />
+            </IconButton>
+            <IconButton size="medium" color="inherit">
+              <Badge badgeContent={2} color="secondary">
+                <ShoppingCart />
+              </Badge>
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

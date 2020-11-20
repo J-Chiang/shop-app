@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
-import Layout from './components/Layout';
 import Home from './containers/Home';
 import Signin from './containers/Signin';
 import Signup from './containers/Signup';
@@ -14,22 +13,22 @@ import Category from './containers/Category';
 
 function App() {
 
-  const dispatch = useDispatch();
-  const auth = useSelector(state => state.auth);
+  // const dispatch = useDispatch();
+  // const auth = useSelector(state => state.auth);
   
-  useEffect(() => {
-    if (!auth.authenticate) {
-        dispatch(isUserLoggedIn()); 
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (!auth.authenticate) {
+  //       dispatch(isUserLoggedIn()); 
+  //   }
+  // }, [])
 
   return (
     <div className="App">
         <Switch>
-          <PrivateRoute path="/" exact component={Home}/>
-          <PrivateRoute path="/products" exact component={Products} />
-          <PrivateRoute path="/orders" exact component={Orders} />
-          <PrivateRoute path="/category" exact component={Category} />
+          <Route path="/" exact component={Home}/>
+          <Route path="/products" exact component={Products} />
+          <Route path="/orders" exact component={Orders} />
+          <Route path="/category" exact component={Category} />
           <Route path="/signin" component={Signin}/>
           <Route path="/signup" component={Signup}/>
         </Switch>

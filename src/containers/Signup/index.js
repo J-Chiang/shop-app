@@ -71,7 +71,6 @@ const Signup = () => {
     const auth = useSelector(state => state.auth);
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -79,7 +78,6 @@ const Signup = () => {
         if (validate()) {
             dispatch(signup(values));
             resetForm();
-            history.push('/signin');
         }
     }
 
