@@ -6,21 +6,21 @@ export const signup = (user) => async (dispatch) => {
         type: userConstants.USER_REGISTER_REQUEST
     })
     
-    const res = await axiosInstance.post('/signup', {
-        ...user
-    })
-
-    if (res.status === 200) {
-        const { message } = res.data;
-        
-        dispatch({
-            type: userConstants.USER_REGISTER_SUCCESS,
-            payload: {
-                message
-            }
+    try {
+        const res = await axiosInstance.post('/signup', {
+            ...user
         });
-    } else {
-        if(res.status === 400) {
+
+        if (res.status === 201) {
+            const { message } = res.data;
+            
+            dispatch({
+                type: userConstants.USER_REGISTER_SUCCESS,
+                payload: {
+                    message
+                }
+            });
+        } else {
             dispatch({
                 type: userConstants.USER_REGISTER_FAILURE,
                 payload: {
@@ -28,5 +28,14 @@ export const signup = (user) => async (dispatch) => {
                 }
             })
         }
+    } catch(err) {
+        dispatch({
+            type: userConstants.USER_REGISTER_FAILURE,
+            payload: {
+                error: err
+            }
+        })
     }
+
+    
 }

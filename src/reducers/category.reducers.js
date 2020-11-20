@@ -9,7 +9,7 @@ const initState = {
 const buildNewCategories = (categories, category) => {
     let res = [];
 
-    if (category.parentId) {
+    if (!category.parentId) {
         res = [...categories, {
             _id: category._id,
             name: category.name,
@@ -22,7 +22,7 @@ const buildNewCategories = (categories, category) => {
     }
 
     for(let cat of categories) {
-        if (cat._id === category.parentId ) {
+        if (cat._id === category.parentId) {
             res.push({
                 ...cat,
                 children: cat.children && cat.children.length > 0 ? buildNewCategories([cat.children, {

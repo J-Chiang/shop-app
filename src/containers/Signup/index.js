@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, TextField, Paper, makeStyles, Button } from '@material-ui/core';
 import { useForm, Form } from '../../components/useForm';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../../actions';
 
@@ -33,8 +33,8 @@ const initialValues = {
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
-    contactNumber: ''
+    password: ''
+    // contactNumber: ''
 }
 
 const Signup = () => {
@@ -55,9 +55,9 @@ const Signup = () => {
         if ('password' in fieldValues) {
             temp.password = (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).test(fieldValues.password) ? "" : "Minimum 8 characters, one lowercase letter, one uppercase letter and one number.";
         }
-        if ('contactNumber' in fieldValues) {
-            temp.contactNumber = (/((?:\+|00)[17](?: |\-)?|(?:\+|00)[1-9]\d{0,2}(?: |\-)?|(?:\+|00)1\-\d{3}(?: |\-)?)?(0\d|\([0-9]{3}\)|[1-9]{0,3})(?:((?: |\-)[0-9]{2}){4}|((?:[0-9]{2}){4})|((?: |\-)[0-9]{3}(?: |\-)[0-9]{4})|([0-9]{7}))/).test(fieldValues.contactNumber) ? "" : "Contact Number is not valid.";
-        }
+        // if ('contactNumber' in fieldValues) {
+        //     temp.contactNumber = fieldValues.contactNumber === "" || (/((?:\+|00)[17](?: |\-)?|(?:\+|00)[1-9]\d{0,2}(?: |\-)?|(?:\+|00)1\-\d{3}(?: |\-)?)?(0\d|\([0-9]{3}\)|[1-9]{0,3})(?:((?: |\-)[0-9]{2}){4}|((?:[0-9]{2}){4})|((?: |\-)[0-9]{3}(?: |\-)[0-9]{4})|([0-9]{7}))/).test(fieldValues.contactNumber) ? "" : "Contact Number is not valid.";
+        // }
         setErrors({
             ...temp
         });
@@ -71,12 +71,15 @@ const Signup = () => {
     const auth = useSelector(state => state.auth);
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (validate()) {
             dispatch(signup(values));
+            resetForm();
+            history.push('/signin');
         }
     }
 
@@ -132,8 +135,9 @@ const Signup = () => {
                                 onChange={handleInputChange}
                                 error={errors.password ? true : false}
                                 helperText={errors.password}
+                                type="password"
                             />
-                            <TextField
+                            {/* <TextField
                                 variant="outlined"
                                 label="Contact Number"
                                 name="contactNumber"
@@ -141,7 +145,7 @@ const Signup = () => {
                                 onChange={handleInputChange}
                                 error={errors.contactNumber ? true : false}
                                 helperText={errors.contactNumber}
-                            />
+                            /> */}
                             <div className={classes.actions}>
                                 <Link to="/signin" className="link">Have an account ?</Link>
                                 <Button variant="contained" type="submit" color="primary" className={classes.actions} >Submit</Button>

@@ -43,11 +43,11 @@ const Signin = () => {
         let temp = { ...errors }
         
         if ('email' in fieldValues) {
-            temp.email = (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(fieldValues.email) ? "" : "Email is not valid.";
+            temp.email = fieldValues.email ? "" : "Email is required";
         }
 
         if ('password' in fieldValues) {
-            temp.password = (/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).test(fieldValues.password) ? "" : "Minimum 8 characters, one lowercase letter, one uppercase letter and one number.";
+            temp.password = fieldValues.password ? "" : "Password is required";
         }
         
         setErrors({
@@ -101,6 +101,7 @@ const Signin = () => {
                                 onChange={handleInputChange}
                                 error={errors.password ? true : false}
                                 helperText={errors.password}
+                                type="password"
                             />
                             <div className={classes.actions}>
                                 <Link to="/signup">Create an account</Link>

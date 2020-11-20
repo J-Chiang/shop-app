@@ -5,6 +5,7 @@ import { getAllCategory, addCategory } from '../../actions';
 import { Add } from '@material-ui/icons';
 import Popup from '../../components/Popup';
 import Notification from '../../components/Notification';
+import Layout from '../../components/Layout';
 
 const Category = (props) => {
 
@@ -20,16 +21,19 @@ const Category = (props) => {
     }, []);
 
     const renderCategories = (categories) => {
+        console.log(categories);
         let myCategories = [];
+
         for (let category of categories) {
             myCategories.push(
                 <li key={category.name}>
                     { category.name }
-                    { category.children.length > 0 ? (<ul>{renderCategories(category.children)}</ul>) : null}
+                    { category.children.length > 0 ? (<ul>{ renderCategories(category.children) }</ul>) : null}
                 </li>
-            )
+            );
         }
 
+        console.log(myCategories);
         return myCategories;
     }
 
@@ -55,41 +59,52 @@ const Category = (props) => {
     }
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <h3>Category</h3>
-            <Button 
-                variant="outlined"
-                startIcon={<Add/>}
-                onClick={() => setOpenPopup(true)}>Add</Button>
-            <ul>
-                { renderCategories(category.categories)}
-            </ul>
-            <Popup
-                title="Add Category"
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                confirmPopup={handleCreateCategory}>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="category"
-                    label="Category"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    value={categoryName}
-                    onChange={(e) => setCategoryName(e.target.value)}
-                />
-                <FormControl>   
-                    <InputLabel htmlFor="parentCategory">Parent Category</InputLabel>       
-                    <Select
-                        native
+        <Layout>
+            <div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <h3 style={{ flexGrow: 1 }}>Category </h3>
+                    <Button 
+                        variant="outlined"
+                        startIcon={<Add/>}
+                        onClick={() => setOpenPopup(true)}
+                    >
+                            Add
+                    </Button>
+                </div>
+                <ul>
+                    { 
+                        renderCategories(category.categories)
+                    }
+                </ul>
+                <Popup
+                    title="Add Category"
+                    openPopup={openPopup}
+                    setOpenPopup={setOpenPopup}
+                    confirmPopup={handleCreateCategory}>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="category"
+                        label="Category"
+                        variant="outlined"
+                        fullWidth
+                        required
+                        value={categoryName}
+                        onChange={(e) => setCategoryName(e.target.value)}
+                    />
+                    <TextField
+                        id="parentCategory"
+                        select
+                        label="Parent Category"
                         value={parentCategoryId}
                         onChange={(e) => setParentCategoryId(e.target.value)}
-                        inputProps={{
-                            name: 'parentCategory',
-                            id: 'parentCategory',
+                        SelectProps={{
+                            native: true,
                         }}
+                        helperText="Select a Parent Category"
+                        variant="outlined"
+                        margin="dense"
+                        fullWidth
                     >
                         <option aria-label="None" value="" />
                         {
@@ -97,13 +112,13 @@ const Category = (props) => {
                                 <option key={option.value} value={option.value}>{option.name}</option> 
                             )
                         }
-                    </Select>
-                </FormControl>
-            </Popup>
-            <Notification 
-            notify={notify}
-            setNotify={setNotify}/>
-        </div>
+                    </TextField>
+                </Popup>
+                <Notification 
+                notify={notify}
+                setNotify={setNotify}/>
+            </div>
+        </Layout>
     )
 }
 
